@@ -28,7 +28,7 @@ public class MainWallController {
     }
 
     @CrossOrigin
-    @GetMapping(path = "/main_wall/{userName}", produces="application/json" )
+    @RequestMapping(path = "/main_wall/{userName}", method = RequestMethod.GET, produces="application/json" )
     public ResponseEntity<List<Tuple<Boolean, PostDto>>> mainWall(@PathVariable String userName){
         try {
             List<Tuple<Boolean, PostDto>> result =

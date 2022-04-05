@@ -47,9 +47,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
-                .withIssuer(request.getRequestURL().toString())
+                .withIssuer("")
                 .withClaim("roles", "ROLE_USER")
                 .sign(algorithm);
 
