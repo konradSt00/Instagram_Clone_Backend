@@ -89,15 +89,15 @@ public class PostController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/p/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<UserDto> addLike(@PathVariable long id, @RequestParam MultipartFile userName ) {
+    @RequestMapping(value = "/p/{id}/{userName}", method = RequestMethod.PUT)
+    public ResponseEntity<UserDto> addLike(@PathVariable long id, @PathVariable String userName ) {
         // TODO: n+1
         try {
-            User user = this.userService.getUser(JsonParsing.toString(userName)); // liking user
+            User user = this.userService.getUser(userName); // liking user
             Post post = this.postService.getPost(id);
             this.postService.addLike(post, user);
             return new ResponseEntity<>(user.toFlat(), HttpStatus.OK);
-        }catch (RuntimeException | IOException e){
+        }catch (RuntimeException e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
