@@ -35,7 +35,7 @@ public class PostController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/p/{id}", method= RequestMethod.POST)
+    @RequestMapping(value = "/post/{id}", method= RequestMethod.POST)
     public ResponseEntity<Long> addComment(@PathVariable long id,
                                            @RequestParam MultipartFile userName,
                                            @RequestParam MultipartFile comment) {
@@ -54,7 +54,7 @@ public class PostController {
         }
     }
     @CrossOrigin
-    @RequestMapping(value = "/p/{id}", method = RequestMethod.GET,
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable long id){
         Post post = this.postService.getPost(id);
@@ -76,10 +76,10 @@ public class PostController {
         }
     }
     @CrossOrigin
-    @RequestMapping(value = "/pi/{userName}/{id}" , method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Tuple<Boolean, PostDto>> mainWall(@PathVariable long id, @PathVariable String userName){
+    @RequestMapping(value = "/post/{userName}/{postID}" , method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Tuple<Boolean, PostDto>> mainWall(@PathVariable long postID, @PathVariable String userName){
         try {
-            Post post = this.postService.getPost(id);
+            Post post = this.postService.getPost(postID);
             Tuple<Boolean, PostDto> result = new Tuple<>(post.userLiked(userName), post.toFlat());
             return new ResponseEntity<>(result, HttpStatus.OK);
         }catch (RuntimeException e){
@@ -89,7 +89,7 @@ public class PostController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/p/{id}/{userName}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/post/{id}/{userName}", method = RequestMethod.PUT)
     public ResponseEntity<UserDto> addLike(@PathVariable long id, @PathVariable String userName ) {
         // TODO: n+1
         try {
@@ -103,7 +103,7 @@ public class PostController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/p/{postID}/{commID}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/post/{postID}/{commID}", method = RequestMethod.DELETE)
     public ResponseEntity<Long> deleteComment(@PathVariable long postID, @PathVariable long commID){
         try {
             long commId = this.commentService.deleteComment(commID);

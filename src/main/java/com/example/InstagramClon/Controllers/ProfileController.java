@@ -42,7 +42,7 @@ public class ProfileController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/pp/{userName}", method = RequestMethod.GET,
+    @RequestMapping(value = "/profile_photo/{userName}", method = RequestMethod.GET, // TODO
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable String userName){
         try{
@@ -59,19 +59,19 @@ public class ProfileController {
         }
     }
     @CrossOrigin
-    @RequestMapping(value = "/{followedUser}", method = RequestMethod.PUT)
-    public ResponseEntity<UserDto> follow(@PathVariable String followedUser, @RequestParam MultipartFile followingUser){
+    @RequestMapping(value = "/{followedUser}/{followingUser}", method = RequestMethod.PUT) // TODO
+    public ResponseEntity<UserDto> follow(@PathVariable String followedUser, @PathVariable String followingUser){
         try {
             UserDto follower = this.userService
-                    .addRemoveFollower(followedUser, JsonParsing.toString(followingUser));
+                    .addRemoveFollower(followedUser, followingUser);
             return new ResponseEntity<>(follower, HttpStatus.OK);
-        }catch (IOException | NoSuchElementException e){
+        }catch (NoSuchElementException e){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/addnewuser", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<UserDto> registerNewUser(@RequestParam MultipartFile newUserName) {
         try {
             UserDto newUser = this.userService.addNewUser(JsonParsing.toString(newUserName));
@@ -83,7 +83,7 @@ public class ProfileController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/s/{phrase}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/{phrase}", method = RequestMethod.GET)
     public ResponseEntity<List<UserDto>> searchUsers(@PathVariable String phrase){
         try {
             List<UserDto> users = this.userService.getUsersByPhrase(phrase);
