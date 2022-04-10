@@ -70,29 +70,5 @@ public class ProfileController {
         }
     }
 
-    @CrossOrigin
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity<UserDto> registerNewUser(@RequestParam MultipartFile newUserName) {
-        try {
-            UserDto newUser = this.userService.addNewUser(JsonParsing.toString(newUserName));
-            return new ResponseEntity<>(newUser, HttpStatus.OK);
-
-        } catch (IOException | RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-        }
-    }
-
-    @CrossOrigin
-    @RequestMapping(value = "/search/{phrase}", method = RequestMethod.GET)
-    public ResponseEntity<List<UserDto>> searchUsers(@PathVariable String phrase){
-        try {
-            List<UserDto> users = this.userService.getUsersByPhrase(phrase);
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        }catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-
-    }
-
 
 }

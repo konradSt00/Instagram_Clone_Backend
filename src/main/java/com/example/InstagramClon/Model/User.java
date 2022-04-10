@@ -46,7 +46,7 @@ public class User implements Comparable {
     public User(){
     }
 
-    public User(String name) {
+    public User(String name, String encodedPassword) {
         this.username = name;
         this.description = "Lorem ipsum ijf oop wkkfs";
         this.numOfFollowers = 0;
@@ -55,6 +55,7 @@ public class User implements Comparable {
         this.followers = new LinkedList<>();
         this.followings = new LinkedList<>();
         this.followings.add(this);
+        this.password = encodedPassword;
         //TODO: set profile photo option
         this.profileImgUrl = "C:/Users/stark/Desktop/Nowy folder/profileImg.jpg";
     }

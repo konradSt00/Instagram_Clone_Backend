@@ -7,10 +7,13 @@ import com.example.InstagramClon.Model.dto.UserDto;
 import com.example.InstagramClon.Model.dtoMappers.UserDtoMapper;
 import com.example.InstagramClon.repositories.FollowerRepository;
 import com.example.InstagramClon.repositories.UserRepository;
+import com.example.InstagramClon.security.config.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -26,16 +29,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@Import(SecurityConfig.class)
 public class UserService {
 
     private UserRepository userRepository;
     private PostService postService;
     private FollowerRepository followerRepository;
+    private PasswordEncoder encoder;
+
     @Autowired
-    public UserService(UserRepository userRepository, PostService postService, FollowerRepository followerRepository) {
+    public UserService(UserRepository userRepository, PostService postService, FollowerRepository followerRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.postService = postService;
         this.followerRepository = followerRepository;
+        this.encoder = encoder;
     }
 
     public User getUser(String name) throws NoSuchElementException{
@@ -93,11 +100,11 @@ public class UserService {
         return follower.addRemoveFollowing(following);
     }
 
-    public UserDto addNewUser(String userName) throws RuntimeException{
+    public UserDto addNewUser(String userName, String rawPassword) throws RuntimeException{
         if(this.userRepository.existsByUsername(userName)){
             throw new RuntimeException();
         }else{
-            User newUser = new User(userName);
+            User newUser = new User(userName, encoder.encode(rawPassword));
             newUser = this.userRepository.save(newUser);
             return newUser.toFlat();
         }
